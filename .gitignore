@@ -1,0 +1,36 @@
+# Secret configuration
+.env
+.env.*
+!.env.example
+
+# Python environments and generated files
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Frontend dependencies and build output
+node_modules/
+dist/
+build/
+.vite/
+
+# Generated local data and databases
+03-Desarrollo/backend/chroma_db/
+03-Desarrollo/backend/.verify_chroma/
+03-Desarrollo/backend/storage/
+*.sqlite
+*.sqlite3
+*.db
+
+# Local tooling and OS files
+.chroma-wheel-check/
+/nul
+.DS_Store
+Thumbs.db
+*.log
