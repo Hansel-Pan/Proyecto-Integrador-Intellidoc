@@ -36,7 +36,7 @@ function Repositories() {
       await repositoriesApi.create({ nombre: newRepoName.trim() });
       setShowCreateModal(false);
       setNewRepoName('');
-      loadRepositories();
+      await loadRepositories();
     } catch (err) {
       setError(err.response?.data?.detail || 'Error al crear repositorio');
     } finally {
@@ -49,7 +49,7 @@ function Repositories() {
     
     try {
       await repositoriesApi.delete(id);
-      loadRepositories();
+      await loadRepositories();
     } catch (err) {
       setError(err.response?.data?.detail || 'Error al eliminar');
     }

@@ -2,6 +2,19 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { documentsApi } from '../services/api';
 
+function formatExtractedValue(value) {
+  if (value === null || value === undefined || value === '') return 'No detectado';
+  if (Array.isArray(value)) {
+    return value.length > 0 ? value.map((item) => formatExtractedValue(item)).join(', ') : 'No detectado';
+  }
+  if (typeof value === 'object') {
+    return Object.entries(value)
+      .map(([key, nestedValue]) => `${key.replace(/_/g, ' ')}: ${formatExtractedValue(nestedValue)}`)
+      .join(' | ');
+  }
+  return String(value);
+}
+
 function DocumentDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -154,7 +167,7 @@ function DocumentDetail() {
                 {Object.entries(document.campos_extraidos).map(([key, value]) => (
                   <div key={key}>
                     <dt className="text-sm text-gray-500 capitalize">{key.replace(/_/g, ' ')}</dt>
-                    <dd className="mt-1 text-sm text-gray-900 font-mono">{value !== null ? String(value) : 'No detectado'}</dd>
+                    <dd className="mt-1 text-sm text-gray-900 whitespace-pre-wrap break-words">{formatExtractedValue(value)}</dd>
                   </div>
                 ))}
               </dl>

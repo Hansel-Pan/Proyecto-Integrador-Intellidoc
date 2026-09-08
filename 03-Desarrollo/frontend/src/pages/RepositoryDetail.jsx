@@ -61,7 +61,7 @@ function RepositoryDetail() {
       await documentsApi.upload(id, selectedFile);
       setShowUploadModal(false);
       setSelectedFile(null);
-      loadData();
+      await loadData();
     } catch (err) {
       setError(err.response?.data?.detail || 'Error al subir archivo');
     } finally {

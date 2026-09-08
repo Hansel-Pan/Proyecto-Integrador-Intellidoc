@@ -2,14 +2,165 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #e8eefc;
+  background: #080d1c;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --glass-surface: rgba(18, 27, 53, 0.68);
+  --glass-surface-strong: rgba(25, 36, 69, 0.84);
+  --glass-border: rgba(158, 180, 255, 0.18);
+  --glass-border-hover: rgba(151, 178, 255, 0.38);
+  --ink: #e8eefc;
+  --muted: #9aa9c7;
+  --accent: #8b7cff;
+  --accent-strong: #6f5cff;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html {
+  min-width: 320px;
+  background: #080d1c;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(103, 82, 255, 0.24), transparent 32rem),
+    radial-gradient(circle at 90% 12%, rgba(34, 211, 238, 0.14), transparent 28rem),
+    linear-gradient(135deg, #080d1c 0%, #10182f 48%, #0b1226 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
+/* Glass surfaces used by the existing Tailwind layout. */
+.bg-gray-50,
+.bg-gray-100 {
+  background-color: transparent !important;
+}
+
+.bg-white {
+  background: var(--glass-surface) !important;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255,255,255,.07) !important;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+aside.bg-white,
+header.bg-white {
+  background: rgba(10, 17, 38, 0.72) !important;
+  border-color: rgba(158, 180, 255, 0.14);
+}
+
+.text-gray-900,
+.text-gray-800,
+.text-gray-700 {
+  color: #edf2ff !important;
+}
+
+.text-gray-600,
+.text-gray-500,
+.text-gray-400 {
+  color: var(--muted) !important;
+}
+
+.border-gray-200,
+.border-gray-100,
+.border-gray-300 {
+  border-color: var(--glass-border) !important;
+}
+
+/* Buttons keep their existing interaction and semantic classes, while sharing one visual language. */
+.bg-indigo-600 {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong)) !important;
+  box-shadow: 0 10px 24px rgba(111, 92, 255, 0.28);
+}
+
+.bg-indigo-600:hover,
+.hover\:bg-indigo-700:hover {
+  background: linear-gradient(135deg, #9b8fff, #7967ff) !important;
+  transform: translateY(-1px);
+}
+
+button,
+a {
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #a99fff;
+  outline-offset: 3px;
+}
+
+input,
+textarea,
+select {
+  color: var(--ink) !important;
+  background: rgba(8, 14, 32, 0.46) !important;
+  border-color: var(--glass-border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #7180a0 !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(157, 143, 255, .8) !important;
+  box-shadow: 0 0 0 3px rgba(139, 124, 255, .17) !important;
+}
+
+.rounded-lg,
+.rounded-md {
+  border-radius: 1rem !important;
+}
+
+.shadow,
+.shadow-sm,
+.shadow-lg,
+.shadow-xl {
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+/* Preserve recognizable status colors, softened for the dark glass palette. */
+.bg-green-100 { background: rgba(52, 211, 153, .16) !important; }
+.bg-blue-100 { background: rgba(56, 189, 248, .16) !important; }
+.bg-red-50, .bg-red-100 { background: rgba(248, 113, 113, .14) !important; }
+.bg-gray-100 { background: rgba(148, 163, 184, .12) !important; }
+.bg-indigo-50 { background: rgba(139, 124, 255, .18) !important; }
+.text-green-800 { color: #76e7bc !important; }
+.text-blue-800 { color: #8adfff !important; }
+.text-red-700, .text-red-800 { color: #ffaaa9 !important; }
+.text-indigo-600, .text-indigo-700, .text-indigo-800 { color: #b4aaff !important; }
+
+@media (max-width: 640px) {
+  main {
+    padding: 1rem !important;
+  }
 }

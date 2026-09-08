@@ -1,7 +1,6 @@
 import json
 import logging
 from typing import Dict, Any, List, Optional
-import google.generativeai as genai
 
 from app.core.config import settings
 
@@ -67,30 +66,74 @@ Respuesta:
 class AIService:
     def __init__(self):
         self.model = None
+        self.provider = settings.LLM_PROVIDER.lower().strip()
         self._initialize()
 
     def _initialize(self):
         if settings.LLM_API_KEY:
             try:
-                genai.configure(api_key=settings.LLM_API_KEY)
-                self.model = genai.GenerativeModel(settings.LLM_MODEL)
-                logger.info(f"AIService inicializado con modelo: {settings.LLM_MODEL}")
+                if self.provider == "gemini":
+                    import google.generativeai as genai
+                    genai.configure(api_key=settings.LLM_API_KEY)
+                    self.model = genai.GenerativeModel(settings.LLM_MODEL)
+                elif self.provider == "openai":
+                    from openai import OpenAI
+                    self.model = OpenAI(
+                        api_key=settings.LLM_API_KEY,
+                        base_url=settings.LLM_BASE_URL or None,
+                    )
+                elif self.provider in {"claude", "anthropic"}:
+                    from anthropic import Anthropic
+                    self.provider = "anthropic"
+                    self.model = Anthropic(api_key=settings.LLM_API_KEY)
+                else:
+                    raise ValueError(
+                        f"Proveedor no soportado: {settings.LLM_PROVIDER}. "
+                        "Usa gemini, openai o anthropic."
+                    )
+                logger.info(
+                    "AIService inicializado: proveedor=%s, modelo=%s",
+                    self.provider,
+                    settings.LLM_MODEL,
+                )
             except Exception as e:
-                logger.error(f"Error inicializando Gemini: {e}")
+                logger.error("Error inicializando proveedor de IA %s: %s", self.provider, e)
                 self.model = None
         else:
             logger.warning("LLM_API_KEY no configurada. AIService no funcional.")
 
     def _call_llm(self, prompt: str) -> str:
         if not self.model:
-            raise AIServiceError("Gemini no está configurado. Revisa LLM_API_KEY en el archivo .env.")
+            raise AIServiceError(
+                f"El proveedor de IA ({self.provider}) no está configurado. "
+                "Revisa LLM_PROVIDER, LLM_MODEL y LLM_API_KEY en .env."
+            )
         try:
-            response = self.model.generate_content(prompt)
-            if response.text:
-                return response.text.strip()
-            raise AIServiceError("Gemini devolvió una respuesta vacía.")
+            if self.provider == "gemini":
+                response = self.model.generate_content(prompt)
+                text = response.text
+            elif self.provider == "openai":
+                response = self.model.chat.completions.create(
+                    model=settings.LLM_MODEL,
+                    messages=[{"role": "user", "content": prompt}],
+                )
+                text = response.choices[0].message.content
+            else:
+                response = self.model.messages.create(
+                    model=settings.LLM_MODEL,
+                    max_tokens=4096,
+                    messages=[{"role": "user", "content": prompt}],
+                )
+                text = "".join(
+                    block.text for block in response.content if hasattr(block, "text")
+                )
+            if text:
+                return text.strip()
+            raise AIServiceError(f"{self.provider} devolvió una respuesta vacía.")
         except Exception as e:
-            logger.error(f"Error llamando a Gemini: {e}")
+            if isinstance(e, AIServiceError):
+                raise
+            logger.error("Error llamando a %s: %s", self.provider, e)
             error_text = str(e)
             if "SERVICE_DISABLED" in error_text or "does not have permission" in error_text:
                 raise AIServiceError(
@@ -103,9 +146,11 @@ class AIService:
                 ) from e
             if "429" in error_text or "quota" in error_text.lower():
                 raise AIServiceError(
-                    "Se agotó la cuota de Gemini. Espera unos minutos o usa un proyecto con cuota disponible."
+                    f"Se agotó la cuota de {self.provider}. Revisa el límite o usa otro proveedor."
                 ) from e
-            raise AIServiceError(f"Gemini no pudo procesar la solicitud: {error_text}") from e
+            raise AIServiceError(
+                f"{self.provider} no pudo procesar la solicitud: {error_text}"
+            ) from e
 
     def clasificar(self, texto: str) -> str:
         """Clasificar documento en una de las categorías predefinidas."""

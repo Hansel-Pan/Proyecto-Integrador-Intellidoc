@@ -24,7 +24,7 @@ def create_repositorio(
     return repositorio
 
 
-@router.get("", response_model=List[RepositorioResponse])
+@router.get("", response_model=List[RepositorioWithStats])
 def list_repositorios(
     skip: int = 0,
     limit: int = 100,
@@ -36,7 +36,16 @@ def list_repositorios(
         repositorios = repo_service.get_all_repositorios(skip, limit)
     else:
         repositorios = repo_service.get_repositorios_by_user(current_user.id, skip, limit)
-    return repositorios
+    doc_service = DocumentService(db)
+    return [
+        RepositorioWithStats(
+            **repositorio.__dict__,
+            total_documentos=(stats := doc_service.get_documentos_stats(repositorio.id))["total"],
+            documentos_por_estado=stats["por_estado"],
+            documentos_por_categoria=stats["por_categoria"],
+        )
+        for repositorio in repositorios
+    ]
 
 
 @router.get("/{repositorio_id}", response_model=RepositorioWithStats)
