@@ -1,94 +1,227 @@
-# IntelliDoc – Sistema Inteligente de Gestión y Análisis Documental
+# IntelliDoc
 
-Proyecto Integrador – Desarrollo de Aplicaciones Empresariales (VI semestre)
-Docente: Wilson Castaño Galviz — UTS
+Sistema web inteligente para gestionar, analizar y consultar documentos empresariales.
 
-## Estructura del proyecto (entregables 1 a 13 del enunciado)
+IntelliDoc permite organizar documentos en repositorios, subir archivos PDF/DOCX/TXT, extraer su contenido, clasificarlos, generar resúmenes y campos estructurados con un proveedor de IA configurable, y realizar consultas conversacionales con fuentes documentales.
 
-| Carpeta | Contenido | Estado |
-|---|---|---|
-| 01-Analisis | Documento de Análisis completo | ✅ Listo (v1.0) |
-| 02-Diseno | Documento de Diseño completo (arquitectura, diagramas, modelo de datos) | ✅ Listo (v1.0) |
-| 03-Desarrollo | Documento técnico | 🟡 Plantilla — se completa con el código |
-| 04-Pruebas | Plan de pruebas y casos de prueba | 🟡 Plantilla con 15 casos de prueba iniciales |
-| 05-Implementacion | Implementación y despliegue | 🟡 Plantilla |
-| 06-Manual-Usuario | Manual de usuario | 🟡 Plantilla |
-| 07-Manual-Tecnico | Manual técnico/administración | 🟡 Plantilla |
-| 08-Matriz-Trazabilidad | Matriz de trazabilidad consolidada | 🟡 Plantilla inicial |
-| 09-Codigo-Fuente | Código fuente | ✅ Backend y frontend presentes; repositorio Git remoto pendiente de verificar |
-| 10-Base-Datos | Scripts de base de datos | ✅ Migración Alembic y script SQL documentado para MySQL |
-| 11-Repositorio-Documentos-Prueba | Mínimo 30 documentos de prueba | ⬜ Lista y generador documentados; archivos físicos pendientes |
-| 12-Video | Video de funcionamiento (máx. 5 min) | ⬜ Guion disponible; archivo de video pendiente |
-| 13-Presentacion | Diapositivas de sustentación | 🟡 Estructura definida; archivo PPTX pendiente |
+## Funcionalidades
 
-## Resumen del proyecto
+- Registro, inicio de sesión y autenticación JWT.
+- Roles de administrador y usuario.
+- Creación y gestión de repositorios.
+- Carga, consulta, descarga y eliminación de documentos.
+- Procesamiento de archivos PDF, DOCX y TXT.
+- Extracción de texto, clasificación, resumen y extracción de campos.
+- Búsqueda por palabras clave.
+- Chat RAG con fuentes documentales.
+- Dashboard con estadísticas y logs de procesamiento.
+- Proveedor de IA intercambiable entre Gemini, OpenAI y Claude/Anthropic.
 
-Aplicación web que permite cargar documentos (PDF, DOCX, TXT), procesarlos automáticamente con IA (extracción de texto, clasificación, resumen, extracción de campos clave), buscar por contenido y hacer preguntas en lenguaje natural con respuestas basadas en los documentos reales (enfoque RAG), además de un dashboard de indicadores.
+## Tecnologías
 
-## Stack propuesto
-- **Frontend:** React + Tailwind CSS
-- **Backend:** Python + FastAPI
-- **Base de datos:** MySQL 8.0
-- **Base vectorial:** ChromaDB
-- **Embeddings:** sentence-transformers (local)
-- **LLM:** API de un proveedor configurable (clasificación, resumen, extracción, respuestas RAG)
+| Capa | Tecnologías |
+|---|---|
+| Frontend | React 18, Vite, Tailwind CSS, Axios, React Router |
+| Backend | Python 3.11, FastAPI, SQLAlchemy, Alembic |
+| Base de datos | MySQL 8.0+; compatible con MySQL externo de Clever Cloud |
+| Búsqueda vectorial | ChromaDB persistente local |
+| Embeddings | sentence-transformers |
+| IA | Gemini, OpenAI o Claude/Anthropic |
 
-Ver el detalle y la justificación completa en `02-Diseno/02-Documento-Diseno.md`.
+## Estructura del repositorio
 
----
+```text
+proyecto-integrador-DAE/
+├── 01-Analisis/                         # Requisitos y análisis
+├── 02-Diseno/                           # Arquitectura y diseño
+├── 03-Desarrollo/
+│   ├── backend/                         # API FastAPI y procesamiento IA
+│   └── frontend/                        # Aplicación React/Vite
+├── 04-Pruebas/                          # Plan y casos de prueba
+├── 05-Implementacion/                   # Documentación de implementación
+├── 06-Manual-Usuario/                   # Manual de usuario
+├── 07-Manual-Tecnico/                   # Manual técnico
+├── 08-Matriz-Trazabilidad/              # Trazabilidad de requisitos
+├── 09-Codigo-Fuente/                    # Documentación histórica del código
+├── 10-Base-Datos/                       # Documentación de base de datos
+├── 11-Repositorio-Documentos-Prueba/    # Documentos para pruebas
+├── 12-Video/                            # Material audiovisual
+├── 13-Presentacion/                     # Presentación del proyecto
+└── README.md
+```
 
-## Estado actual y siguiente paso
+El código ejecutable se encuentra en `03-Desarrollo/backend` y `03-Desarrollo/frontend`.
 
-El backend y el frontend ya están estructurados y cuentan con un flujo funcional base. La documentación debe mantenerse como una fotografía verificable del estado actual: no se deben marcar como ejecutados los casos que no tengan evidencia, y las limitaciones técnicas deben aparecer también en los manuales.
+## Requisitos previos
 
-El primer bloque que sí se puede completar ya, sin escribir una sola línea de lógica de negocio, es:
-1. **§1 Descripción del entorno de desarrollo** → registrar versiones reales de Python, Node.js, PostgreSQL, SO y editor que va a usar el equipo.
-2. **§2 Configuración del proyecto** → crear la estructura de carpetas `backend/` y `frontend/`, inicializar el repositorio Git (entregable 09) y subir el primer commit con esta documentación.
-3. **§3 Estructura del código fuente** → confirmar/ajustar el árbol de carpetas ya propuesto en el documento.
+- Python 3.11.
+- Node.js 18+ y pnpm o npm.
+- MySQL 8.0+ local o una instancia MySQL externa.
+- Una API key de Gemini, OpenAI o Anthropic.
 
-El siguiente paso prioritario es cerrar las brechas de validación: corregir la integración del almacén vectorial y el reprocesamiento, ejecutar la base de datos y la API, y capturar evidencias reales antes de afirmar que el sistema está completo.
+## Configurar el backend
 
----
+Desde una terminal:
 
-## Parte 1 — Paso a paso para completar los documentos faltantes
+```bash
+cd 03-Desarrollo/backend
+python -m venv venv
+```
 
-| # | Documento | Qué necesita estar listo antes | Qué se hace en ese paso |
-|---|---|---|---|
-| 1 | **03-Desarrollo** | Nada (es el primero) | Documentar entorno, inicializar repo Git y estructura de carpetas (backend/frontend). Luego se va llenando sección por sección junto con el código (pasos 2 a 10 de la Parte 2). |
-| 2 | **10-Base-Datos** | Modelos de datos definidos en el backend (paso 3 de la Parte 2) | Exportar el script SQL de creación de tablas (o migraciones) que reproduzca el modelo entidad-relación de 02-Diseño. |
-| 3 | **11-Repositorio-Documentos-Prueba** | Nada — puede hacerse en paralelo con el código | Reunir/crear mínimo 30 documentos ficticios (PDF/DOCX/TXT) en al menos 3 categorías (ej. Contratos, Facturas, Informes), sin datos personales reales. |
-| 4 | **04-Pruebas** | Sistema con las funcionalidades mínimas operativas (pasos 4 a 9 de la Parte 2) | Ejecutar los 15 casos de prueba ya redactados, registrar resultados reales, capturas y defectos encontrados. |
-| 5 | **05-Implementacion** | Backend y frontend corriendo de extremo a extremo | Documentar instalación, variables de entorno reales (sin exponer claves), proceso de despliegue y evidencias del sistema funcionando. |
-| 6 | **06-Manual-Usuario** | Frontend terminado | Redactar el paso a paso desde la perspectiva del usuario, con capturas de pantalla reales. |
-| 7 | **07-Manual-Tecnico** | Instalación probada al menos una vez desde cero | Completar comandos reales, configuración de IA, problemas encontrados y su solución. |
-| 8 | **08-Matriz-Trazabilidad** | Documentos 03 a 07 con contenido real | Consolidar la trazabilidad final: requisito → historia/caso de uso → componente de diseño → código → caso de prueba. |
-| 9 | **12-Video** | Sistema funcional completo | Grabar demo de máx. 5 minutos cubriendo el guion de sustentación (sección 10 del enunciado). |
-| 10 | **13-Presentacion** | Todo lo anterior cerrado | Armar las diapositivas de sustentación (requisitos, arquitectura, IA, pruebas, despliegue). |
+Activar el entorno en Windows:
 
----
+```powershell
+venv\Scripts\Activate.ps1
+```
 
-## Parte 2 — Paso a paso para desarrollar el proyecto (código)
+Instalar dependencias:
 
-1. **Preparar entorno y repositorio Git** — crear repo remoto, estructura `backend/`/`frontend/`, `.gitignore`, `.env.example`. *(Alimenta 03-Desarrollo y 09-Codigo-Fuente.)*
-2. **Backend base (FastAPI)** — proyecto mínimo corriendo (`/health`), configuración de variables de entorno y conexión a PostgreSQL.
-3. **Modelo de datos y migraciones** — crear las tablas de 02-Diseño (usuarios, repositorios, documentos, fragmentos, logs_procesamiento, consultas_chat). *(Alimenta 10-Base-Datos.)*
-4. **Autenticación y roles** — registro/login con JWT, roles Administrador/Usuario (RF-01, RF-02).
-5. **Repositorios y carga de archivos** — CRUD de repositorios, subida/consulta/descarga/eliminación de PDF/DOCX/TXT con validaciones (RF-03, RF-04, RF-05).
-6. **Extracción de texto** — integrar `pdfplumber` (PDF) y `python-docx` (DOCX) al pipeline (RF-06).
-7. **Chunking + embeddings + ChromaDB** — dividir el texto, generar embeddings con `sentence-transformers` y guardarlos.
-8. **Integración con el LLM (`AIService`)** — clasificación, resumen y extracción de campos clave (RF-07, RF-08, RF-09).
-9. **Búsqueda por palabra clave y chat RAG** — endpoint de búsqueda y endpoint de preguntas en lenguaje natural con citación de fuentes (RF-10, RF-11).
-10. **Dashboard y logs de errores** — indicadores del repositorio y registro/gestión de errores de procesamiento (RF-12, RF-13, RF-14).
-11. **Frontend (React)** — pantallas de login, repositorios, detalle de documento, chat y dashboard, consumiendo la API anterior.
-12. **Repositorio de documentos de prueba** — preparar los 30 documentos de prueba en paralelo a cualquiera de los pasos anteriores. *(Alimenta 11.)*
-13. **Pruebas funcionales** — ejecutar y documentar los casos de prueba sobre el sistema ya integrado. *(Alimenta 04.)*
-14. **Despliegue** — desplegar (local/VM) y documentar el proceso reproducible. *(Alimenta 05.)*
-15. **Manuales** — redactar manual de usuario y manual técnico con el sistema ya funcionando. *(Alimenta 06 y 07.)*
-16. **Cierre de trazabilidad, video y sustentación** — consolidar 08, grabar 12 y preparar 13.
+```bash
+pip install -r requirements.txt
+```
 
----
+Crear `.env` copiando `.env.example` y configurar las variables:
 
-## Próximos pasos sugeridos (resumen)
-1. Ejecutar el bloque inmediato descrito arriba: entorno + repo Git + estructura de carpetas.
-2. Avanzar el Paso 2 en adelante de la Parte 2 (backend base, modelo de datos, autenticación...).
-3. Ir marcando cada documento de la Parte 1 como completado a medida que su prerrequisito quede listo.
+```env
+DATABASE_URL=mysql+pymysql://usuario:contraseña@host:3306/base_de_datos
+SECRET_KEY=genera-una-clave-secreta-larga
+BACKEND_CORS_ORIGINS=["http://localhost:5173"]
+CHROMADB_PATH=./chroma_db
+LLM_PROVIDER=gemini
+LLM_API_KEY=tu_api_key
+LLM_MODEL=gemini-flash-latest
+LLM_BASE_URL=
+```
+
+Para utilizar OpenAI:
+
+```env
+LLM_PROVIDER=openai
+LLM_API_KEY=tu_api_key_de_openai
+LLM_MODEL=gpt-4o-mini
+LLM_BASE_URL=
+```
+
+Para utilizar Claude:
+
+```env
+LLM_PROVIDER=anthropic
+LLM_API_KEY=tu_api_key_de_anthropic
+LLM_MODEL=claude-3-5-haiku-latest
+LLM_BASE_URL=
+```
+
+La clave de API nunca debe subirse a GitHub. El archivo `.env` está excluido mediante `.gitignore`.
+
+Aplicar las migraciones:
+
+```bash
+alembic upgrade head
+```
+
+Iniciar la API:
+
+```bash
+uvicorn app.main:app --reload --port 8080
+```
+
+Endpoints útiles:
+
+- API: http://localhost:8080
+- Health check: http://localhost:8080/health
+- Documentación Swagger: http://localhost:8080/docs
+
+## Configurar el frontend
+
+En otra terminal:
+
+```bash
+cd 03-Desarrollo/frontend
+pnpm install
+```
+
+Crear `.env` con:
+
+```env
+VITE_API_URL=http://localhost:8080/api/v1
+```
+
+Iniciar la aplicación:
+
+```bash
+pnpm run dev
+```
+
+La interfaz estará disponible normalmente en http://localhost:5173.
+
+Para generar una compilación de producción:
+
+```bash
+pnpm run build
+```
+
+## Base de datos externa
+
+El backend puede conectarse a una base MySQL externa, por ejemplo Clever Cloud. La variable debe utilizar el controlador de SQLAlchemy para PyMySQL:
+
+```env
+DATABASE_URL=mysql+pymysql://usuario:contraseña@host:3306/base_de_datos
+```
+
+Después de cambiar de base de datos, ejecutar siempre:
+
+```bash
+cd 03-Desarrollo/backend
+alembic upgrade head
+```
+
+Esto crea las tablas de usuarios, repositorios, documentos, fragmentos, logs y consultas de chat.
+
+## Flujo básico de uso
+
+1. Iniciar el backend y el frontend.
+2. Crear el primer usuario; se registra como administrador.
+3. Crear un repositorio.
+4. Subir un PDF, DOCX o TXT.
+5. Esperar a que el documento alcance el estado `procesado`.
+6. Consultar el resumen y los campos extraídos.
+7. Realizar preguntas desde el chat.
+
+## API principal
+
+La API utiliza el prefijo `/api/v1`.
+
+| Recurso | Operaciones principales |
+|---|---|
+| `/auth` | Registro, login, perfil y usuarios |
+| `/repositories` | Crear, listar, actualizar y eliminar repositorios |
+| `/documents` | Subir, listar, buscar, descargar y eliminar documentos |
+| `/chat` | Preguntas y historial de conversaciones |
+| `/dashboard` | Métricas, logs y reprocesamiento |
+
+La especificación completa está disponible en Swagger en `/docs` cuando el backend está iniciado.
+
+## Consideraciones actuales
+
+- Los documentos originales se almacenan localmente en `03-Desarrollo/backend/storage`.
+- ChromaDB se almacena localmente en `03-Desarrollo/backend/chroma_db`.
+- Estos directorios no deben versionarse ni utilizarse como almacenamiento persistente en un despliegue serverless.
+- Los archivos PDF escaneados requieren OCR, funcionalidad que no está incluida actualmente.
+- El procesamiento de documentos se ejecuta de forma síncrona y puede tardar según el tamaño del archivo y el proveedor de IA.
+
+## Documentación académica
+
+- [Análisis](01-Analisis/01-Documento-Analisis.md)
+- [Diseño](02-Diseno/02-Documento-Diseno.md)
+- [Desarrollo](03-Desarrollo/README.md)
+- [Plan de pruebas](04-Pruebas/04-Plan-Pruebas.md)
+- [Implementación](05-Implementacion/05-Documento-Implementacion.md)
+- [Manual de usuario](06-Manual-Usuario/06-Manual-Usuario.md)
+- [Manual técnico](07-Manual-Tecnico/07-Manual-Tecnico.md)
+- [Matriz de trazabilidad](08-Matriz-Trazabilidad/08-Matriz-Trazabilidad.md)
+- [Base de datos](10-Base-Datos/README.md)
+- [Documentos de prueba](11-Repositorio-Documentos-Prueba/README.md)
+
+## Estado del proyecto
+
+El sistema cuenta con un flujo funcional local de autenticación, repositorios, documentos, procesamiento IA, búsqueda, chat y dashboard. La validación completa debe realizarse con las credenciales y servicios configurados en el entorno local, sin publicar secretos en el repositorio.
