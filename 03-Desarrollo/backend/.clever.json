@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "app_id": "app_bdb5e1a1-bbb8-4421-a715-e88e42f3cdbb",
+      "org_id": "user_952d54cf-a28d-42ac-8c5c-7dad00ebfe3c",
+      "deploy_url": "https://push-n3-par-clevercloud-customers.services.clever-cloud.com/app_bdb5e1a1-bbb8-4421-a715-e88e42f3cdbb.git",
+      "git_ssh_url": "git+ssh://git@push-n3-par-clevercloud-customers.services.clever-cloud.com/app_bdb5e1a1-bbb8-4421-a715-e88e42f3cdbb.git",
+      "name": "intellidoc-backend",
+      "alias": "intellidoc-backend"
+    }
+  ]
+}
