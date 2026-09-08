@@ -1,0 +1,9 @@
+{
+  "deploy": {
+    "command": "cd 03-Desarrollo/backend && gunicorn app.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT"
+  },
+  "build": {
+    "type": "pip",
+    "goal": "install -r requirements.txt"
+  }
+}
